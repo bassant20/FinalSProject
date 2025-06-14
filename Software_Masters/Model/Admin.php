@@ -1,4 +1,6 @@
 <?php
+// Start the session
+session_start();
 
 require_once 'User.php';
 require_once 'Subject.php';
@@ -12,6 +14,34 @@ class Admin extends User implements Subject{
     public function notifyVolunteer(): void {}
     public function showEvents(): array {
         return $this->events;
+    }
+
+    public function signIn($email,$password) 
+    {
+        $this->email=$email;
+        $this->password=$password;
+        $conn = Database::getInstance()->getConnection();
+        $sql = "SELECT * FROM user where email='$this->email'&&password='$this->password'";
+        $result = $conn->query($sql);
+        
+        if ($result->num_rows > 0) {
+            
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $_SESSION["id"]=$row["id"];
+                $_SESSION["firstname"]=$row["firtname"];
+               
+
+                // echo $_SESSION["id"];
+                // echo $_SESSION["firstname"];
+                header("Location: ../View/index.php");
+                
+            }
+        }
+        else {
+            echo "0 results";
+        }
+        
     }
 
     private $observers = [];
@@ -70,6 +100,7 @@ class Admin extends User implements Subject{
     //     $conn->close();
 
     // }
+    
 }
 
 ?>

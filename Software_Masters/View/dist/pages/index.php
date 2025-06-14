@@ -1,3 +1,9 @@
+<?php
+// Start the session
+session_start();
+?>
+
+
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
@@ -70,14 +76,31 @@
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
-          <a href="./index.html" class="brand-link">
+          <div class="brand-link">
             <!--begin::Brand Image-->
             
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">Admin</span>
+            <?php
+            if(isset($_SESSION["id"])){?>
+              <span class="brand-text fw-light">Welcome 
+              <?php
+              echo $_SESSION["firstname"];
+              ?>
+              </span>
+
+              <?php
+            }
+            else{?>
+              <span class="brand-text fw-light">Admin
+              </span>
+
+              <?php
+            }
+            ?>
+            
             <!--end::Brand Text-->
-          </a>
+          </div>
           <!--end::Brand Link-->
         </div>
         <!--end::Sidebar Brand-->
@@ -92,18 +115,23 @@
               data-accordion="false"
             >
               <li class="nav-item">
-                    <a href="./index.php" class="nav-link active">
+                    <a href="./index.php" class="nav-link ">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Dashboard</p>
                     </a>
                   </li>
-
-                  <li class="nav-item">
-                    <a href="./addE.php" class="nav-link active">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Add Event</p>
-                    </a>
-                  </li>
+                  <?php
+                    if(isset($_SESSION["id"])){?>
+                      <li class="nav-item">
+                        <a href="./addE.php" class="nav-link">
+                          <i class="nav-icon bi bi-circle"></i>
+                          <p>Add Event</p>
+                        </a>
+                      </li>
+                      <?php
+                    }
+                  ?>
+            
               <!-- <li class="nav-item">
                 <a href="./generate/theme.html" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
@@ -256,18 +284,35 @@
                   </li>
                 </ul>
               </li> -->
-             <li class="nav-item">
+              <?php
+                    if(!isset($_SESSION["id"])){?>
+                     <li class="nav-item">
                         <a href="./examples/login.php" class="nav-link">
                           <i class="nav-icon bi bi-circle"></i>
                           <p>Login</p>
                         </a>
                       </li>
-                      <li class="nav-item">
-                        <a href="./examples/register.php" class="nav-link">
+                      <?php
+                    }
+                  ?>
+             
+                       <?php
+                    if(isset($_SESSION["id"])){?>
+                    <li class="nav-item">
+                        <a href="addVol.php" class="nav-link">
                           <i class="nav-icon bi bi-circle"></i>
-                          <p>Register</p>
+                          <p>Add Volunteer</p>
                         </a>
                       </li>
+                     <li class="nav-item">
+                        <a href="../../../Controller/SignoutController.php?action=logout" class="nav-link">
+                          <i class="nav-icon bi bi-circle"></i>
+                          <p>SignOut</p>
+                        </a>
+                      </li>
+                      <?php
+                    }
+                  ?>
             
             </ul>
             <!--end::Sidebar Menu-->

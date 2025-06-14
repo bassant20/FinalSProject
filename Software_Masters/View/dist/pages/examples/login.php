@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
@@ -56,7 +57,7 @@
       <div class="card">
         <div class="card-body login-card-body">
           <p class="login-box-msg">Sign in to start your session</p>
-          <form action="../../../../Controller/DonorController.php" method="post">
+          <form action="../../../../Controller/SignInController.php" method="post">
             <div class="input-group mb-3">
               <input type="email" class="form-control" placeholder="Email" name="email"/>
               <div class="input-group-text"><span class="bi bi-envelope"></span></div>
@@ -76,7 +77,7 @@
               <!-- /.col -->
               <div class="col-4">
                 <div class="d-grid gap-2">
-                  <button type="submit" class="btn btn-primary">Sign In</button>
+                  <button type="submit" class="btn btn-primary" name="submit">Sign In</button>
                 </div>
               </div>
               <!-- /.col -->

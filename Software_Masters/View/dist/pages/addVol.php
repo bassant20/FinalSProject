@@ -326,29 +326,63 @@ session_start();
 <main class="app-main">
     <div class="card card-primary card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Add Event</div></div>
+                  <div class="card-header"><div class="card-title">Add Volunteer</div></div>
                   <!--end::Header-->
                   <!--begin::Form-->
-                  <form action="../../../Controller/AddE.php" method="post">
+                  <form action="../../../Controller/AddVolController.php" method="post">
                     <!--begin::Body-->
                     <div class="card-body">
                       <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Name</label>
+                        <label for="exampleInputEmail1" class="form-label">First Name</label>
                         <input
                           type="text"
                           class="form-control"
-                          id="name"
+                          id="Fname"
                           aria-describedby="emailHelp"
-                          name="name"
+                          name="Fname"
                         />
                       </div>
                       <div class="mb-3">
-                        <label for="location" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="location" name="location" />
+                        <label for="exampleInputEmail1" class="form-label">Last Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="Lname"
+                          aria-describedby="emailHelp"
+                          name="Lname"
+                        />
                       </div>
-                      <div class="input-group mb-3">
-                        <input type="date" class="form-control" id="date" name="date" />
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="email"
+                          aria-describedby="emailHelp"
+                          name="email"
+                        />
                       </div>
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="password"
+                          aria-describedby="emailHelp"
+                          name="password"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Phone Number</label>
+                        <input
+                          type="tel" 
+                          class="form-control"
+                          id="phone"
+                          aria-describedby="emailHelp"
+                          name="phone"
+                        />
+                      </div>
+                      
                     </div>
                     <!--end::Body-->
                     <!--begin::Footer-->
