@@ -1,3 +1,26 @@
+<?php
+session_start();
+require_once '../../Model/Donation.php';
+require_once '../../Model/Donor.php';
+require_once '../../Model/Event.php';
+
+// Get the last donation details
+$donation = new Donation();
+$donor = new Donor();
+$donor->getUser($_SESSION['id']);
+
+// Get the last donation for this donor
+$donations = $donation->getDonorDonations($_SESSION['id']);
+$lastDonation = $donations->fetch_assoc();
+
+// Get the event details
+$event = new Event($lastDonation['event_name'], $lastDonation['date'], $lastDonation['location']);
+
+// Set the donation details
+$donation->setDonor($donor);
+$donation->setEvent($event);
+$donation->setAmount($lastDonation['amount']);
+?>
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -5,6 +28,16 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<style>
+			.receipt-preview {
+				background-color: #f8f9fa;
+				padding: 20px;
+				margin: 20px 0;
+				border-radius: 5px;
+				white-space: pre-wrap;
+				font-family: monospace;
+			}
+		</style>
 	</head>
 	<body class="is-preload">
 		<div id="wrapper">
@@ -19,8 +52,11 @@
 							<p>Your donation has been successfully processed. We greatly appreciate your generosity and support.</p>
 							<p>A confirmation email has been sent to your registered email address.</p>
 							
+							<div class="receipt-preview" id="receiptPreview" style="display: none;"></div>
+							
 							<ul class="actions">
-								<li><a href="index.php" class="button primary">Return to Home</a></li>
+								<li><button onclick="generateReceipt()" class="button primary">Generate Receipt</button></li>
+								<li><a href="index.php" class="button">Return to Home</a></li>
 								<li><a href="donation.php" class="button">Make Another Donation</a></li>
 							</ul>
 						</div>
@@ -35,5 +71,41 @@
 		<script src="assets/js/breakpoints.min.js"></script>
 		<script src="assets/js/util.js"></script>
 		<script src="assets/js/main.js"></script>
+		<script>
+			function generateReceipt() {
+				// Show loading state
+				document.querySelector('button').textContent = 'Generating Receipt...';
+				document.querySelector('button').disabled = true;
+
+				// Make AJAX call to generate receipt
+				fetch('../../Controller/DonorC/generate_receipt.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						donation_id: <?php echo $lastDonation['id']; ?>
+					})
+				})
+				.then(response => response.text())
+				.then(receipt => {
+					// Display receipt
+					document.getElementById('receiptPreview').textContent = receipt;
+					document.getElementById('receiptPreview').style.display = 'block';
+					
+					// Reset button state
+					document.querySelector('button').textContent = 'Generate Receipt';
+					document.querySelector('button').disabled = false;
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					alert('Error generating receipt. Please try again.');
+					
+					// Reset button state
+					document.querySelector('button').textContent = 'Generate Receipt';
+					document.querySelector('button').disabled = false;
+				});
+			}
+		</script>
 	</body>
 </html> 

@@ -1,6 +1,9 @@
 <?php
 require_once 'PaymentStrategy.php';
 require_once 'Database.php';
+require_once 'CreditCardReceipt.php';
+require_once 'PayPalReceipt.php';
+require_once 'BankTransferReceipt.php';
 
 class Donation {
     private $donationID;
@@ -23,6 +26,14 @@ class Donation {
         $this->paymentStrategy = $paymentStrategy;
     }
 
+    public function setDonor(Donor $donor) {
+        $this->donor = $donor;
+    }
+
+    public function setEvent(Event $event) {
+        $this->event = $event;
+    }
+
     public function processPayment() {
         if (!isset($this->paymentStrategy)) {
             throw new Exception("Payment strategy not set");
@@ -31,6 +42,25 @@ class Donation {
             throw new Exception("Amount not set");
         }
         return $this->paymentStrategy->Pay($this->amount);
+    }
+
+    public function generateReceipt() {
+        if (!isset($this->donor) || !isset($this->event) || !isset($this->amount) || !isset($this->paymentStrategy)) {
+            throw new Exception("Missing required information for receipt generation");
+        }
+
+        // Create appropriate receipt generator based on payment method
+        if ($this->paymentStrategy instanceof CreditCard) {
+            $receiptGenerator = new CreditCardReceipt($this, $this->donor, $this->event, $this->amount, $this->paymentStrategy);
+        } elseif ($this->paymentStrategy instanceof PayPal) {
+            $receiptGenerator = new PayPalReceipt($this, $this->donor, $this->event, $this->amount, $this->paymentStrategy);
+        } elseif ($this->paymentStrategy instanceof BankTransfer) {
+            $receiptGenerator = new BankTransferReceipt($this, $this->donor, $this->event, $this->amount, $this->paymentStrategy);
+        } else {
+            throw new Exception("Unsupported payment method for receipt generation");
+        }
+
+        return $receiptGenerator->generateReceipt();
     }
 
     public function getAllEvents() {
@@ -105,10 +135,6 @@ class Donation {
         $stmt->bind_param("i", $donor_id);
         $stmt->execute();
         return $stmt->get_result();
-    }
-
-    public function generateReceipt(): void {
-        // Implement receipt generation logic
     }
 }
 ?>
