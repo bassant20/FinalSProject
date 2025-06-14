@@ -1,6 +1,6 @@
 <?php
 // Start the session
-session_start();
+
 ?>
 <?php
 require_once 'User.php';
@@ -22,15 +22,16 @@ class Donor extends User implements Observer{
         $this->email=$email;
         $this->password=$password;
         $conn = Database::getInstance()->getConnection();
-        $sql = "SELECT id FROM donors where email='$this->email'&&password='$this->password'";
+        $sql = "SELECT * FROM donors where email='$this->email'&&password='$this->password'";
         $result = $conn->query($sql);
         
         if ($result->num_rows > 0) {
             
             // output data of each row
             while($row = $result->fetch_assoc()) {
-                $_SESSION["id"]=$row["id"];
-                echo $_SESSION["id"];
+                $_SESSION["Did"]=$row["id"];
+                //echo $_SESSION["Did"];
+                header("Location: ../View/DonorV/donation.php");
             }
         }
         else {

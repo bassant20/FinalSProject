@@ -3,6 +3,11 @@ require_once '../../Model/Donation.php';
 $donation = new Donation();
 $events = $donation->getAllEvents();
 ?>
+<?php
+
+session_start();
+
+?>
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -57,7 +62,11 @@ $events = $donation->getAllEvents();
 					<header class="major">
 						<h1>Make a Donation</h1>
 					</header>
+<?php
 
+                echo $_SESSION["Did"];
+
+?>
 					<form action="../../Controller/DonorC/donation_controller.php" method="POST" id="donationForm">
 						<div class="row gtr-uniform">
 							<div class="col-12">
