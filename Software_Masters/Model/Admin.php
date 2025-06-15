@@ -43,6 +43,23 @@ class Admin extends User implements Subject{
         }
         
     }
+    
+    public function AddVol($fname,$lname,$email,$password,$pnum){
+        $this->fname=$fname;
+        $this->lname=$lname;
+        $this->email=$email;
+        $this->password=$password;
+        $this->Pnum=$pnum;
+        $conn = Database::getInstance()->getConnection();
+        $sql = "INSERT INTO Volunteer (firtname,lastname,email,password,phonenum, role) 
+                VALUES ('$this->fname', '$this->lname', '$this->email', '$this->password', '$this->Pnum','Volunteer')";
+
+        if ($conn->query($sql) === TRUE) {
+            header("Location: ../View/index.php");
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
 
     private $observers = [];
 
@@ -58,6 +75,7 @@ class Admin extends User implements Subject{
         foreach ($this->observers as $observer) {
             $observer->update($event);
         }
+        
     }
 
     public function addEvent(Event $event) {
@@ -79,6 +97,7 @@ class Admin extends User implements Subject{
 
         // Save event to DB, etc.
         $this->notifyObservers($event);  // Notify all registered Donors/Volunteers
+        header("Location: ../View/index.php");
     }
     // public function Add(Event $event){
     //     $this->event=$event;
