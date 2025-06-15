@@ -3,18 +3,28 @@ session_start();
 require_once '../../Model/Donation.php';
 require_once '../../Model/Donor.php';
 require_once '../../Model/Event.php';
+require_once '../../Model/Database.php';
 
 // Get the last donation details
 $donation = new Donation();
 $donor = new Donor();
-$donor->getUser($_SESSION['id']);
+$donor->getUser($_SESSION["Did"]);
 
 // Get the last donation for this donor
-$donations = $donation->getDonorDonations($_SESSION['id']);
+$donations = $donation->getDonorDonations($_SESSION["Did"]);
 $lastDonation = $donations->fetch_assoc();
 
-// Get the event details
-$event = new Event($lastDonation['event_name'], $lastDonation['date'], $lastDonation['location']);
+// Get event details from the database
+$conn = Database::getInstance()->getConnection();
+$eventSql = "SELECT * FROM event WHERE id = ?";
+$stmt = $conn->prepare($eventSql);
+$stmt->bind_param("i", $lastDonation['event_id']);
+$stmt->execute();
+$eventResult = $stmt->get_result();
+$eventData = $eventResult->fetch_assoc();
+
+// Create event object with the correct data
+$event = new Event($eventData['name'], $eventData['date'], $eventData['location']);
 
 // Set the donation details
 $donation->setDonor($donor);

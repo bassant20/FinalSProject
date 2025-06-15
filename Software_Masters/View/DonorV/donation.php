@@ -68,6 +68,7 @@ session_start();
 
 ?>
 					<form action="../../Controller/DonorC/donation_controller.php" method="POST" id="donationForm">
+						<input type="hidden" name="donor_id" value="<?php echo $_SESSION["Did"]; ?>">
 						<div class="row gtr-uniform">
 							<div class="col-12">
 								<label for="event_id">Select Event to Donate To</label>

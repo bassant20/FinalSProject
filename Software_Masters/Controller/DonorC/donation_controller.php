@@ -17,6 +17,7 @@ class DonationController {
             $amount = floatval($_POST['amount']);
             $paymentMethod = $_POST['paymentMethod'];
             $event_id = $_POST['event_id'];
+            $donor_id = $_POST['donor_id'];
 
             // Set the payment strategy based on the selected method
             switch ($paymentMethod) {
@@ -34,6 +35,8 @@ class DonationController {
                     $password = $_POST['paypalPassword'];
                     
                     $paymentStrategy = new PayPal($email, $password);
+                    // Store PayPal email in session for receipt
+                    $_SESSION['paypal_email'] = $email;
                     break;
 
                 case 'bankTransfer':
@@ -52,6 +55,9 @@ class DonationController {
                 // Set the amount
                 $this->donation->setAmount($amount);
                 
+                // Store amount in session for receipt
+                $_SESSION['donation_amount'] = $amount;
+                
                 // Set the payment strategy
                 $this->donation->setPaymentStrategy($paymentStrategy);
                 
@@ -59,7 +65,10 @@ class DonationController {
                 $result = $this->donation->processPayment();
                 
                 // Store donation in database
-                $this->donation->addToDonation($_SESSION['id'], $event_id, $amount, $paymentMethod);
+                $this->donation->addToDonation($donor_id, $event_id, $amount, $paymentMethod);
+                
+                // Set session variables for success page
+                $_SESSION['last_donation_id'] = $this->donation->getLastInsertId();
                 
                 // Redirect to success page
                 header("Location: ../../View/DonorV/donation_success.php");

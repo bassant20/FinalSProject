@@ -77,12 +77,23 @@ class Donation {
     }
 
     public function getDonationById($id) {
-        $sql = "SELECT d.*, e.name as event_name, CONCAT(dr.firstname, ' ', dr.lastname) as donor_name 
+        $sql = "SELECT d.*, e.name as event_name, e.date, e.location, CONCAT(dr.firstname, ' ', dr.lastname) as donor_name 
                 FROM donoation d 
                 LEFT JOIN event e ON d.event_id = e.id 
                 LEFT JOIN donors dr ON d.donor_id = dr.id 
-                WHERE d.id = $id";
-        return $this->conn->query($sql)->fetch_assoc();
+                WHERE d.id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function getDonationId() {
+        return $this->donationID;
+    }
+
+    public function setDonationId($id) {
+        $this->donationID = $id;
     }
 
     public function addToDonation($donor_id, $event_id, $amount, $payment_method) {
@@ -97,12 +108,15 @@ class Donation {
             $stmt->bind_param("iids", $donor_id, $event_id, $amount, $payment_method);
             $stmt->execute();
 
+            // Get the inserted donation ID
+            $this->donationID = $this->conn->insert_id;
+
             // Update the current_amount
             $sql = "UPDATE donoation 
                     SET current_amount = current_amount + ? 
-                    WHERE id = (SELECT id FROM donoation WHERE event_id = ? ORDER BY id DESC LIMIT 1)";
+                    WHERE id = ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("di", $amount, $event_id);
+            $stmt->bind_param("di", $amount, $this->donationID);
             $stmt->execute();
 
             // Commit transaction
@@ -135,6 +149,10 @@ class Donation {
         $stmt->bind_param("i", $donor_id);
         $stmt->execute();
         return $stmt->get_result();
+    }
+
+    public function getLastInsertId() {
+        return $this->conn->insert_id;
     }
 }
 ?>

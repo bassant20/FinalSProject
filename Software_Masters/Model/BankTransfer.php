@@ -28,5 +28,17 @@ class BankTransfer implements PaymentStrategy {
         return "Payment of $" . number_format($amount, 2) . " processed successfully via Bank Transfer from " . 
                $this->bankName . " account ending in " . substr($this->accountNumber, -4);
     }
+
+    public function getAccountNumber() {
+        return $this->accountNumber;
+    }
+
+    public function getBankName() {
+        return $this->bankName;
+    }
+
+    public function getAccountHolderName() {
+        return $this->accountHolderName;
+    }
 }
 ?> 

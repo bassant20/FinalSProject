@@ -33,15 +33,15 @@ abstract class ReceiptGenerator {
                "              DONATION RECEIPT            \n" .
                "==========================================\n" .
                "Date: " . $this->date . "\n" .
-               "Receipt #: " . $this->donation->donationID . "\n" .
+               "Receipt #: " . $this->donation->getDonationId() . "\n" .
                "==========================================\n\n";
     }
 
     protected function generateDonorInfo() {
         return "Donor Information:\n" .
-               "Name: " . $this->donor->fname . " " . $this->donor->lname . "\n" .
-               "Email: " . $this->donor->email . "\n" .
-               "Phone: " . $this->donor->Pnum . "\n\n";
+               "Name: " . $this->donor->getFirstName() . " " . $this->donor->getLastName() . "\n" .
+               "Email: " . $this->donor->getEmail() . "\n" .
+               "Phone: " . $this->donor->getPhoneNumber() . "\n\n";
     }
 
     protected function generateEventInfo() {

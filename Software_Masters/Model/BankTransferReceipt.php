@@ -6,9 +6,9 @@ class BankTransferReceipt extends ReceiptGenerator {
         return "Payment Information:\n" .
                "Payment Method: Bank Transfer\n" .
                "Amount: $" . number_format($this->amount, 2) . "\n" .
-               "Bank Name: " . $this->paymentMethod->bankName . "\n" .
-               "Account Number: ****" . substr($this->paymentMethod->accountNumber, -4) . "\n" .
-               "Account Holder: " . $this->paymentMethod->accountHolderName . "\n" .
+               "Bank Name: " . $this->paymentMethod->getBankName() . "\n" .
+               "Account Number: ****" . substr($this->paymentMethod->getAccountNumber(), -4) . "\n" .
+               "Account Holder: " . $this->paymentMethod->getAccountHolderName() . "\n" .
                "Transaction Status: Completed\n\n";
     }
 

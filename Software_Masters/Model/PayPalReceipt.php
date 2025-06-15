@@ -5,8 +5,8 @@ class PayPalReceipt extends ReceiptGenerator {
     protected function generatePaymentInfo() {
         return "Payment Information:\n" .
                "Payment Method: PayPal\n" .
-               "Amount: $" . number_format($this->amount, 2) . "\n" .
-               "PayPal Email: " . $this->paymentMethod->email . "\n" .
+               "Amount: $" . number_format($this->paymentMethod->getAmount(), 2) . "\n" .
+               "PayPal Email: " . $this->paymentMethod->getEmail() . "\n" .
                "Transaction Status: Completed\n\n";
     }
 

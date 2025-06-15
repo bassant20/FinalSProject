@@ -67,6 +67,23 @@ class Donor extends User implements Observer{
     public function showDonations(): array {
         return $this->donations;
     }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function getFirstName() {
+        return $this->fname;
+    }
+
+    public function getLastName() {
+        return $this->lname;
+    }
+
+    public function getPhoneNumber() {
+        return $this->Pnum;
+    }
+
     public function addDonation(Donation $donation): void {
         $this->donations[] = $donation;
     }

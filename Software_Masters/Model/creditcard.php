@@ -29,6 +29,22 @@ class CreditCard implements PaymentStrategy {
         $maskedCard = substr($this->cardNo, 0, 4) . '********' . substr($this->cardNo, -4);
         return "Payment of $" . number_format($amount, 2) . " processed successfully using Credit Card ending in " . substr($this->cardNo, -4);
     }
+
+    public function getCardNumber() {
+        return $this->cardNo;
+    }
+
+    public function getHolderName() {
+        return $this->holderName;
+    }
+
+    public function getCVV() {
+        return $this->cvv;
+    }
+
+    public function getExpiryDate() {
+        return $this->expiryDate;
+    }
 }
 
 ?>
